@@ -1,6 +1,6 @@
-# yuvyuv image compression tests
+# pico image cart
 
-Convert images to ideal palette with dithering for display in pico-8. Images cropped and scaled to 128x128 in Abobe PhotoShop 2021.
+Converts a 128x128 png into a PICO-8 .p8 image cart with an optimum palette of 16 (from 32) colors, dithered. 
 
 ## Image sources
 https://www.apple.com/newsroom/2019/02/apple-highlights-best-photos-shot-on-iphone-around-the-world/

@@ -4,9 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "yuvyuv",
+            "label": "picoimgcart",
             "type": "shell",
-            "command": "go build -o build/pack",
+            "command": "go build -o build/picoimgcart",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
