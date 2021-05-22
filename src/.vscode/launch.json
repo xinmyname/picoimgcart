@@ -11,7 +11,10 @@
             "mode": "auto",
             "program": "main.go",
             "args": [
-                "../images/Darren Yamashita 2019.png"
+                "-i", 
+                "../images/Alex Jiang 2019.png",
+                "-o", 
+                "/Users/andy/Library/Application Support/pico-8/carts/alex.p8"
             ]
         }
     ]
