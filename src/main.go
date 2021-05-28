@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"image"
 	"image/color"
@@ -19,13 +20,14 @@ func main() {
 		println("Usage: picoimgcart -i <filename> -o <filename>")
 		println()
 		println("  -i Specify source filename. Image must be 128x128 in size. JPG or PNG.")
-		println("  -o Specify destination filename. Output can be .png or .p8")
+		println("  -o Specify destination filename. Output can be .png, .bin or .p8")
 		println()
 		println("     Image is dithered to the closest matching 16 of 32 available colors")
 		println("     Closest matching color determined in Lab color space")
 		println()
 		println("     .png generates an indexed PNG file")
 		println("     .p8 generates a PICO-8 cart with the image encoded as sprite+map data")
+		println("     .bin binary image [width:16][height:16][pal:8*8][image:4*width*height]")
 		os.Exit(1)
 	}
 
@@ -75,6 +77,28 @@ func main() {
 
 	if dstExt == ".png" {
 		png.Encode(dstFile, dstImage)
+	} else if dstExt == ".bin" {
+		bounds := srcImage.Bounds()
+		width := uint16(bounds.Dx())
+		height := uint16(bounds.Dy())
+		binary.Write(dstFile, binary.LittleEndian, width)
+		binary.Write(dstFile, binary.LittleEndian, height)
+
+		dstPalMap := make(map[color.Color]int)
+
+		for i := 0; i < 16; i += 1 {
+			dstPalMap[dstPal[i]] = i
+			binary.Write(dstFile, binary.LittleEndian, uint8(dstIndices[i]))
+		}
+
+		for y := 0; y < int(height); y += 1 {
+			for x := 0; x < int(width)/2; x += 1 {
+				c1 := dstPalMap[dstImage.At(x*2, y)]
+				c2 := dstPalMap[dstImage.At(x*2+1, y)]
+				binary.Write(dstFile, binary.LittleEndian, uint8(c1<<4|c2))
+			}
+		}
+
 	} else if dstExt == ".p8" {
 
 		dstPalMap := make(map[color.Color]int)
@@ -306,7 +330,7 @@ func OptimumPalette(img image.Image) (color.Palette, []int) {
 
 		val := index
 		if index > 15 {
-			val += 128
+			val += 112
 		}
 
 		pico8pal = append(pico8pal, val)

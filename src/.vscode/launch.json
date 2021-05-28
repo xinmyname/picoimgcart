@@ -12,9 +12,9 @@
             "program": "main.go",
             "args": [
                 "-i", 
-                "../images/Alex Jiang 2019.png",
+                "../images/HOI.png",
                 "-o", 
-                "/Users/andy/Library/Application Support/pico-8/carts/alex.p8"
+                "hoi.png"
             ]
         }
     ]
